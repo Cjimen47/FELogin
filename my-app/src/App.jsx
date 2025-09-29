@@ -35,6 +35,26 @@ function App() {
 
   const [formState, formAction, pending] = useActionState(signupAction, {errors: null});
 
+  // Forgot Password Section
+  const[showReset, setShowReset] = useState(false);
+  const[resetMessage, setResetMessage] = useState('');
+
+  function passwordReset(e)
+  {
+    e.preventDefault();
+
+    const username = e.target.username.value.trim();
+
+    if(username.length < 3)
+    {
+      setResetMessage("Enter a valid username.");
+      return;
+    }
+
+    setResetMessage("An email with a reset form has been sent to the corresponding user (If it exists).")
+    e.target.reset();
+  }
+
   return (
     <>
     <div className="login-wrapper">
@@ -56,7 +76,34 @@ function App() {
           ))}
           </ul>}
 
+        <button type = "button" className = "link-button" onClick={() => setShowReset(true)}>Forgot Password?</button>
+
       </form>
+
+      {showReset && (
+        <form className="reset-box" onSubmit={passwordReset}>
+          <h3 className="title">Reset Password</h3>
+
+          <label htmlFor="reset-username">Username</label>
+          <input id="reset-username" name="username" type="text" placeholder="Enter your username"/>
+
+          <button type="submit">Send reset link</button>
+
+          {resetMessage && (
+            <ul className="error">
+              <li>{resetMessage}</li>
+            </ul>
+          )}
+
+          <button type="button" className="link-button"
+            onClick={() => (setShowReset(false), setResetMessage(''))}
+          >
+            Back to login
+          </button>
+
+        </form>
+      )}
+
     </div>
       
         

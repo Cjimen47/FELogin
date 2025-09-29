@@ -94,6 +94,20 @@ h1 {
   color: #ffca99;
   padding: 0 1rem;
   font-size: 0.2em;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.reset-box button {
+  margin-bottom: 12px;
+}
+
+.reset-box .error {
+  margin-bottom: 20px;
+}
+
+h3 {
+  padding-top: 50px;
 }
 
 @media (prefers-color-scheme: light) {
