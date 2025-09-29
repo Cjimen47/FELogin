@@ -90,6 +90,11 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+.error {
+  color: #ffca99;
+  padding: 0 1rem;
+  font-size: 0.2em;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
