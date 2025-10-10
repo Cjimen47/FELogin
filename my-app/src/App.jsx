@@ -3,6 +3,8 @@ import { useActionState} from 'react'
 import {hasSpecialChars, hasNumber, hasUpperCase, meetsLength} from '../util/validation';
 import './App.css'
 
+import { Link } from 'react-router-dom'
+
 function App() {
   function signupAction(prevFormState, formData){
     const username = formData.get('username');
@@ -76,8 +78,7 @@ function App() {
           ))}
           </ul>}
 
-        <button type = "button" className = "link-button" onClick={() => setShowReset(true)}>Forgot Password?</button>
-
+        <Link to="/reset" className="link-button">Forgot Password?</Link>
       </form>
 
       {showReset && (
@@ -95,11 +96,8 @@ function App() {
             </ul>
           )}
 
-          <button type="button" className="link-button"
-            onClick={() => (setShowReset(false), setResetMessage(''))}
-          >
-            Back to login
-          </button>
+          <Link to="/" className="link-button">Back to login</Link>
+
 
         </form>
       )}

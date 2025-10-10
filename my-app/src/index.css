@@ -43,7 +43,6 @@ body {
 }
 
 .logo {
-  width: 120px;
   margin-bottom: 20px;
 }
 
@@ -68,6 +67,7 @@ input[type="password"] {
     border-radius: 6px;
     background: #333;
     color: #fff;
+    box-sizing: border-box;
 }
 
 button {
@@ -92,10 +92,12 @@ h1 {
 }
 .error {
   color: #ffca99;
-  padding: 0 1rem;
-  font-size: 0.2em;
-  margin-top: 10px;
+  font-size: 0.6em;
+  margin-top: 20px;
   margin-bottom: 20px;
+
+  list-style-type: none;
+  padding-left: 0;
 }
 
 .reset-box button {
@@ -109,6 +111,15 @@ h1 {
 h3 {
   padding-top: 50px;
 }
+
+.link-button {
+  color: #6b6b6b;
+  cursor: pointer;
+  display: grid;
+  margin-top: 20px;
+}
+
+
 
 @media (prefers-color-scheme: light) {
   :root {
