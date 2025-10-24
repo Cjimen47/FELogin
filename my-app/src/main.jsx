@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ResetPassword from './ResetPassword.jsx'
 import ResetSent from './ResetSent.jsx'
 
+import Dashboard from "./Dashboard.jsx";
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
@@ -14,6 +16,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<App />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/reset/sent" element={<ResetSent />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

@@ -4,6 +4,7 @@ import {hasSpecialChars, hasNumber, hasUpperCase, meetsLength} from '../util/val
 import './App.css'
 
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function App() {
   function signupAction(prevFormState, formData){
@@ -57,12 +58,39 @@ function App() {
     e.target.reset();
   }
 
+  // Example account hardcoded
+  const VALID_USERNAME = 'admin';
+  const VALID_PASSWORD = 'password';
+
+  const [loginError, setLoginError] = useState('');
+
+  const navigate = useNavigate();
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const username = form.get('username')?.trim();
+    const password = form.get('password') ?? '';
+
+    if(username === VALID_USERNAME && password === VALID_PASSWORD) 
+    {
+      setLoginError('');
+      navigate('/dashboard');
+    } 
+    else 
+    {
+      setLoginError('Invalid username or password.');
+    }
+
+  }
+
+
   return (
     <>
     <div className="login-wrapper">
       <img src="/flare.png" alt="Flare events Logo" className="logo"></img>
       <h2 className="title">Member Login</h2>
-      <form action={formAction}>
+      <form onSubmit={handleLogin}>
         <label htmlFor="username">Username</label>
         <input id="username" type="text" name="username" placeholder="Enter Username"/>
 
@@ -71,6 +99,13 @@ function App() {
 
         <button type="submit">Login</button>
         <p id="message"></p>
+
+        {loginError && (
+          <ul className="error">
+            <li>{loginError}</li>
+          </ul>
+        )}
+
 
         {formState.errors && <ul className='error'>
           {formState.errors.map((error) => (
