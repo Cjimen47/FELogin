@@ -1,14 +1,15 @@
 import "./MatchesTab.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Popover from "./Popover";
 
 export default function MatchesTab({ open, onClose }) {
   const overlayRef = useRef(null);
   const closeBtnRef = useRef(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selected, setSelected] = useState(null);
 
-  // Click outside to close
   useEffect(() => {
     function handleClick(e) {
-      // Close only if clicking the overlay
       if (e.target === overlayRef.current) onClose();
     }
     if (open) {
@@ -17,12 +18,21 @@ export default function MatchesTab({ open, onClose }) {
     }
   }, [open, onClose]);
 
-  // Focus the close button when opened
   useEffect(() => {
     if (open && closeBtnRef.current) {
       closeBtnRef.current.focus();
     }
   }, [open]);
+
+  const openMenu = (match, el) => {
+    setSelected(match);
+    setAnchorEl(el);
+  };
+
+  const closeMenu = () => {
+    setSelected(null);
+    setAnchorEl(null);
+  };
 
   return (
     <div
@@ -42,11 +52,37 @@ export default function MatchesTab({ open, onClose }) {
         </div>
 
         <div className="drawer-body">
-          <div className="match-card">Example Match 1</div>
-          <div className="match-card">Example Match 2</div>
-          <div className="match-card">Example Match 3</div>
+          <div
+            className="match-card"
+            onClick={(e) => openMenu({ id: 1, name: "Example Match 1" }, e.currentTarget)}
+          >
+            Example Match 1
+          </div>
+          <div
+            className="match-card"
+            onClick={(e) => openMenu({ id: 2, name: "Example Match 2" }, e.currentTarget)}
+          >
+            Example Match 2
+          </div>
+          <div
+            className="match-card"
+            onClick={(e) => openMenu({ id: 3, name: "Example Match 3" }, e.currentTarget)}
+          >
+            Example Match 3
+          </div>
         </div>
       </aside>
+
+      {anchorEl && selected && (
+        <Popover anchorEl={anchorEl} onClose={closeMenu} align="right">
+          <div className="popover-menu">
+            <button className="popover-item">View profile</button>
+            <button className="popover-item">Message</button>
+            <button className="popover-item">Report</button>
+            <button className="popover-item">Remove</button>
+          </div>
+        </Popover>
+      )}
     </div>
   );
 }
