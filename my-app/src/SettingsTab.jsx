@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import ProfileModal from "./ProfileModal";
 import LanguageModal from "./LanguageModal";
-import NotificationsModal from "./NotificationsModal";
+import NotificationModal from "./NotificationsModal";
 
 export default function SettingsTab({ open, onClose }) {
   const overlayRef = useRef(null);
@@ -27,6 +27,23 @@ export default function SettingsTab({ open, onClose }) {
     navigate("/");
   };
 
+  const openProfile = () => {
+    setProfileOpen(true);
+    setLanguageOpen(false);
+    setNotificationsOpen(false);
+  };
+
+  const openLanguage = () => {
+    setLanguageOpen(true);
+    setProfileOpen(false);
+    setNotificationsOpen(false);
+  };
+
+  const openNotifications = () => {
+    setNotificationsOpen(true);
+    setProfileOpen(false);
+    setLanguageOpen(false);
+  };
 
   return (
     <>
@@ -41,18 +58,31 @@ export default function SettingsTab({ open, onClose }) {
           </div>
 
           <div className="drawer-body">
-            <div className="settings-card" onClick={() => setProfileOpen(true)}>Profile</div>
-            <div className="settings-card" onClick={() => setLanguageOpen(true)}>Language</div>
-            <div className="settings-card" onClick={() => setNotificationsOpen(true)}>Notifications</div>
-            <div className="settings-card" onClick={handleLogout}>Logout</div>
-
+            <div className="settings-card" onClick={openProfile}>
+              Profile
+            </div>
+            <div className="settings-card" onClick={openLanguage}>
+              Language
+            </div>
+            <div className="settings-card" onClick={openNotifications}>
+              Notifications
+            </div>
+            <div className="settings-card" onClick={handleLogout}>
+              Logout
+            </div>
           </div>
         </aside>
       </div>
 
       <ProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} />
-      <LanguageModal open={languageOpen} onClose={() => setLanguageOpen(false)} />
-      <NotificationsModal open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
+      <LanguageModal
+        open={languageOpen}
+        onClose={() => setLanguageOpen(false)}
+      />
+      <NotificationModal
+        open={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+      />
     </>
   );
 }
