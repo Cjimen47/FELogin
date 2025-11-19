@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { requestPasswordReset } from './services/authMock'
+import { requestPasswordReset } from './services/api'
 
 export default function ResetPassword() 
 {
@@ -16,13 +16,12 @@ export default function ResetPassword()
     setErrors([])
     setLoading(true)
 
-    const username = e.target.username.value.trim()
+    const email = e.target.email.value.trim()
 
     try 
     {
-      const res = await requestPasswordReset(username)  // Mock call
-      // Pass message and username to confirmation page
-      navigate('/reset/sent', { state: { message: res.message, username } })
+      const res = await requestPasswordReset(email)
+      navigate('/reset/sent', { state: { resetToken: res.resetToken, email } })
     } 
     catch (err) 
     {
