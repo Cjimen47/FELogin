@@ -4,31 +4,31 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { requestPasswordReset } from './services/api'
 
-export default function ResetPassword() 
-{
+export default function ResetPassword() {
   const [errors, setErrors] = useState([])
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  async function onSubmit(e) 
-  {
+  async function onSubmit(e) {
     e.preventDefault()
     setErrors([])
     setLoading(true)
 
-    const email = e.target.email.value.trim()
+    const username = e.target.username.value.trim()   // <-- FIXED
 
-    try 
-    {
-      const res = await requestPasswordReset(email)
-      navigate('/reset/sent', { state: { resetToken: res.resetToken, email } })
+    try {
+      const res = await requestPasswordReset(username)
+      navigate('/reset/sent', { 
+        state: { 
+          resetToken: res.resetToken, 
+          email: username
+        } 
+      })
     } 
-    catch (err) 
-    {
+    catch (err) {
       setErrors([err.message || 'Something went wrong'])
     } 
-    finally 
-    {
+    finally {
       setLoading(false)
     }
   }
@@ -40,7 +40,12 @@ export default function ResetPassword()
 
       <form onSubmit={onSubmit}>
         <label htmlFor="username">Username</label>
-        <input id="username" name="username" type="text" placeholder="Enter Username" />
+        <input
+          id="username"
+          name="username"
+          type="text"
+          placeholder="Enter Username"
+        />
 
         <button type="submit" disabled={loading}>
           {loading ? 'Sending…' : 'Send reset link'}
@@ -48,7 +53,9 @@ export default function ResetPassword()
 
         {errors.length > 0 && (
           <ul className="error">
-            {errors.map((e) => <li key={e}>{e}</li>)}
+            {errors.map((e) => (
+              <li key={e}>{e}</li>
+            ))}
           </ul>
         )}
       </form>

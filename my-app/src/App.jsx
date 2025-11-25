@@ -5,6 +5,7 @@ import './App.css'
 
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { loginUser } from './services/api'
 
 function App() {
   function signupAction(prevFormState, formData){
@@ -58,32 +59,25 @@ function App() {
     e.target.reset();
   }
 
-  // Example account hardcoded
-  const VALID_USERNAME = 'admin';
-  const VALID_PASSWORD = 'password';
-
   const [loginError, setLoginError] = useState('');
 
   const navigate = useNavigate();
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const username = form.get('username')?.trim();
     const password = form.get('password') ?? '';
 
-    if(username === VALID_USERNAME && password === VALID_PASSWORD) 
-    {
+    try {
+      // treat "username" as email for the API
+      await loginUser({ email: username, password });
       setLoginError('');
       navigate('/dashboard');
-    } 
-    else 
-    {
-      setLoginError('Invalid username or password.');
+    } catch (err) {
+      setLoginError(err.message || 'Invalid username or password.');
     }
-
   }
-
 
   return (
     <>

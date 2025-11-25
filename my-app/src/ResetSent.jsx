@@ -7,7 +7,7 @@ export default function ResetSent()
   const { state } = useLocation() || {}
   const resetToken = state?.resetToken
   const email = state?.email
-  const message = 'If an account exists, a reset link was sent.'
+  const message = 'A reset password form has been sent to your email.'
 
   return (
     <div className="login-wrapper">
@@ -20,8 +20,8 @@ export default function ResetSent()
 
       {resetToken && (
         <div className="helper-row">
-          <p>Dev token for {email}:</p>
-          <code>{resetToken}</code>
+          <p>Dev token for {email} :</p>
+          <code style={{ fontSize: "0.25rem", wordBreak: "break-all", }}>{resetToken}</code>
         </div>
       )}
 

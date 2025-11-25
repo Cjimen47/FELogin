@@ -17,7 +17,13 @@ export async function loginUser(data) {
     body: JSON.stringify(data),
   });
 
-  return res.json();
+  const body = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(body.message || body.type || "Invalid email or password");
+  }
+
+  return body; // accessToken, refreshToken, etc
 }
 
 export async function requestPasswordReset(email) {
@@ -31,7 +37,7 @@ export async function requestPasswordReset(email) {
     throw new Error("Failed to request password reset");
   }
 
-  const data = await res.json(); // { resetToken }
+  const data = await res.json(); // resetToken
   return {
     message: "If an account exists, a reset link was sent.",
     resetToken: data.resetToken,
