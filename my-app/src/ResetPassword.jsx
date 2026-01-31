@@ -14,14 +14,14 @@ export default function ResetPassword() {
     setErrors([])
     setLoading(true)
 
-    const username = e.target.username.value.trim()   // <-- FIXED
+    const email = e.target.email.value.trim()   // <-- FIXED
 
     try {
-      const res = await requestPasswordReset(username)
+      const res = await requestPasswordReset(email)
       navigate('/reset/sent', { 
         state: { 
           resetToken: res.resetToken, 
-          email: username
+          email: email
         } 
       })
     } 
@@ -39,12 +39,12 @@ export default function ResetPassword() {
       <h2 className="title">Reset Password</h2>
 
       <form onSubmit={onSubmit}>
-        <label htmlFor="username">Username</label>
+        <label htmlFor="email">Email</label>
         <input
-          id="username"
-          name="username"
+          id="email"
+          name="email"
           type="text"
-          placeholder="Enter Username"
+          placeholder="Enter Email"
         />
 
         <button type="submit" disabled={loading}>

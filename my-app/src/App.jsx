@@ -9,7 +9,7 @@ import { loginUser } from './services/api'
 
 function App() {
   function signupAction(prevFormState, formData){
-    const username = formData.get('username');
+    const email = formData.get('email');
     const password = formData.get('password');
 
     let errors = [];
@@ -47,11 +47,11 @@ function App() {
   {
     e.preventDefault();
 
-    const username = e.target.username.value.trim();
+    const email = e.target.email.value.trim();
 
-    if(username.length < 3)
+    if(email.length < 3)
     {
-      setResetMessage("Enter a valid username.");
+      setResetMessage("Enter a valid email.");
       return;
     }
 
@@ -65,19 +65,29 @@ function App() {
 
   async function handleLogin(e) {
     e.preventDefault();
+
     const form = new FormData(e.currentTarget);
-    const username = form.get('username')?.trim();
-    const password = form.get('password') ?? '';
+    const email = form.get("email")?.trim();
+    const password = form.get("password") ?? "";
 
     try {
-      // treat "username" as email for the API
-      await loginUser({ email: username, password });
-      setLoginError('');
-      navigate('/dashboard');
+      // Call API
+      const session = await loginUser({ email, password });
+
+      // Demo / verification logs
+      console.log("Login response:", session);
+      console.log("Stored accessToken:", localStorage.getItem("accessToken"));
+      console.log("Stored refreshToken:", localStorage.getItem("refreshToken"));
+
+      setLoginError("");
+
+      // Go to dashboard
+      navigate("/dashboard");
     } catch (err) {
-      setLoginError(err.message || 'Invalid username or password.');
+      setLoginError(err.message || "Invalid email or password.");
     }
   }
+
 
   return (
     <>
@@ -85,8 +95,8 @@ function App() {
       <img src="/flare.png" alt="Flare events Logo" className="logo"></img>
       <h2 className="title">Member Login</h2>
       <form onSubmit={handleLogin}>
-        <label htmlFor="username">Username</label>
-        <input id="username" type="text" name="username" placeholder="Enter Username"/>
+        <label htmlFor="email">Email</label>
+        <input id="email" type="text" name="email" placeholder="Enter Email"/>
 
         <label htmlFor="password">Password</label>
         <input id="password" type="password" name="password" placeholder="Enter Password"/>
@@ -114,8 +124,8 @@ function App() {
         <form className="reset-box" onSubmit={passwordReset}>
           <h3 className="title">Reset Password</h3>
 
-          <label htmlFor="reset-username">Username</label>
-          <input id="reset-username" name="username" type="text" placeholder="Enter your username"/>
+          <label htmlFor="reset-email">Email</label>
+          <input id="reset-email" name="email" type="text" placeholder="Enter your Email"/>
 
           <button type="submit">Send reset link</button>
 

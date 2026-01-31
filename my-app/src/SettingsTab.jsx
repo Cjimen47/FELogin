@@ -6,6 +6,9 @@ import ProfileModal from "./ProfileModal";
 import LanguageModal from "./LanguageModal";
 import NotificationModal from "./NotificationsModal";
 
+import { logoutUser } from "./services/api";
+
+
 export default function SettingsTab({ open, onClose }) {
   const overlayRef = useRef(null);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -22,10 +25,23 @@ export default function SettingsTab({ open, onClose }) {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     onClose();
-    navigate("/");
+
+    try {
+      await logoutUser();
+    } catch (e) {
+      console.warn("Logout API failed:", e);
+    } finally {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      window.location.replace("/");
+    }
   };
+
+
+
 
   const openProfile = () => {
     setProfileOpen(true);

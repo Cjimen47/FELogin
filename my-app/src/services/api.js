@@ -23,8 +23,37 @@ export async function loginUser(data) {
     throw new Error(body.message || body.type || "Invalid email or password");
   }
 
-  return body; // accessToken, refreshToken, etc
+  // Store tokens for demo + future auth
+  // (Names may differ depending on backend response)
+  if (body.accessToken) localStorage.setItem("accessToken", body.accessToken);
+  if (body.refreshToken) localStorage.setItem("refreshToken", body.refreshToken);
+
+  return body;
 }
+
+
+
+export async function logoutUser() {
+  const token = localStorage.getItem("accessToken");
+
+  // If we don't have a token, nothing to invalidate server-side
+  if (!token) return;
+
+  const res = await fetch(`${API_URL}/api/v1/me/sessions`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  // optional: if you want to surface an error
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || "Logout failed");
+  }
+}
+
+
 
 export async function requestPasswordReset(email) {
   const res = await fetch(`${API_URL}/api/v1/credentials/reset`, {
@@ -43,3 +72,18 @@ export async function requestPasswordReset(email) {
     resetToken: data.resetToken,
   };
 }
+
+export async function getMe() {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(`${API_URL}/api/v1/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) throw new Error("Not authenticated");
+
+  return res.json();
+}
+
