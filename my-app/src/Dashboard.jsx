@@ -41,16 +41,6 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
-      {/* Small auth indicator for demo */}
-      <div style={{ position: "absolute", top: 16, left: 16, opacity: 0.85 }}>
-        {loadingMe ? (
-          <span>Loading…</span>
-        ) : me ? (
-          <span>
-            Logged in as <strong>{me.email ?? me.username ?? "User"}</strong>
-          </span>
-        ) : null}
-      </div>
 
       {!open && !openSettings && (
         <>

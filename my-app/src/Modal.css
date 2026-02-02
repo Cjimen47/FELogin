@@ -78,6 +78,7 @@
 .modal-textarea {
   resize: vertical;
   box-sizing: border-box;
+  resize: none;
 }
 
 .modal-field-row {

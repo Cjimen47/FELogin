@@ -1,11 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "./Modal";
+import { getMe } from "./services/api";
 
 export default function ProfileModal({ open, onClose }) {
   const [name, setName] = useState("Leo Tran");
   const [bio, setBio] = useState("Tell others a bit about yourself...");
   const [city, setCity] = useState("Toronto");
   const [province, setProvince] = useState("ON");
+
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    if (!open) return;
+
+    (async () => {
+      try {
+        const me = await getMe();
+        setEmail(me?.email || "");
+      } catch {
+        setEmail("");
+      }
+    })();
+  }, [open]);
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -14,7 +30,6 @@ export default function ProfileModal({ open, onClose }) {
     onClose();
   };
 
-  // Simple initials for avatar placeholder (can be wired from `name` later)
   const initials = name
     .split(" ")
     .map((part) => part[0])
@@ -25,13 +40,12 @@ export default function ProfileModal({ open, onClose }) {
   return (
     <Modal open={open} onClose={onClose} title="Profile">
       <form className="modal-form" onSubmit={handleSave}>
-
         {/* Avatar */}
         <div className="profile-avatar-row">
-        <div className="profile-avatar-placeholder">
-          <span>{initials}</span>
+          <div className="profile-avatar-placeholder">
+            <span>{initials}</span>
+          </div>
         </div>
-      </div>
 
         {/* Name */}
         <div className="modal-field">
@@ -42,6 +56,18 @@ export default function ProfileModal({ open, onClose }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Your name"
+          />
+        </div>
+
+        {/* Email (read-only) */}
+        <div className="modal-field">
+          <label className="modal-label">Email</label>
+          <input
+            type="text"
+            className="modal-input"
+            value={email || "—"}
+            disabled
+            readOnly
           />
         </div>
 
